@@ -3,6 +3,7 @@
 namespace App\models;
 
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 class User extends Model
 {
@@ -56,7 +57,7 @@ class User extends Model
         $model = new static();
 
         try {
-            JWT::decode($token, $model->config['jwt']['secret'], ['HS256']);
+            JWT::decode($token, new Key($model->config['jwt']['secret'], 'HS256'));
             return true;
         } catch (\Exception $e) {
             return false;

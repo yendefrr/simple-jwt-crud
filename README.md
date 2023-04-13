@@ -1,6 +1,7 @@
 # CRUD с JWT авторизацией
 
 [Демо](http://api.yendefr.software/crud/news/all)
+[Swagger Документация](http://api.yendefr.software/crud/docs/index#/)
 
 ### Чтение статей `/news/all`
 ![all](docs/1.png)

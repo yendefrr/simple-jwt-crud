@@ -25,6 +25,7 @@ class NewsController extends Controller
      * @OA\Post(
      *     path="/crud/news/add",
      *     tags={"News"},
+     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="title",
      *         in="query",
@@ -84,6 +85,7 @@ class NewsController extends Controller
      * @OA\Patch(
      *     path="/crud/news/edit",
      *     tags={"News"},
+     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="query",
@@ -149,8 +151,9 @@ class NewsController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/crud/news/{id}",
+     *     path="/crud/news/remove?id={id}",
      *     tags={"News"},
+     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",

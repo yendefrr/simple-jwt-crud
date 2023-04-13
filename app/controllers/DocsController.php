@@ -1,12 +1,17 @@
 <?php
-// Swagger controller
 
 namespace App\Controllers;
 
 use OpenApi\Generator;
 
 /**
- * @OA\Info(title="JWT CRUD Service", version="1.0")
+ * @OA\SecurityScheme(
+ *    securityScheme="bearerAuth",
+ *    type="http",
+ *    scheme="bearer",
+ *    bearerFormat="JWT"
+ * )
+ * @OA\Info(title="JWT CRUD Service", version="1.1")
  */
 class DocsController extends Controller
 {

@@ -6,6 +6,34 @@ use App\Models\User;
 
 class UsersController extends Controller
 {
+    /**
+     * @OA\Post(
+     *     path="/crud/users/login",
+     *     tags={"Users"},
+     *     @OA\Parameter(
+     *         name="username",
+     *         in="query",
+     *         description="User username",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="password",
+     *         in="query",
+     *         description="User password",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="User logged in"),
+     *     @OA\Response(response="400", description="Require username and password"),
+     *     @OA\Response(response="401", description="Invalid password"),
+     *     @OA\Response(response="404", description="User not found"),
+     * )
+     */
     public function login()
     {
         $username = $this->params['username'];
@@ -13,7 +41,7 @@ class UsersController extends Controller
 
         if (!isset($username) || empty($username) || !isset($password) || empty($password) || strlen($password) < 6) {
             $this->response([
-                'message' => 'Invalid username or password',
+                'message' => 'Require username and password',
             ], 400);
         }
 
@@ -36,6 +64,34 @@ class UsersController extends Controller
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="/crud/users/register",
+     *     tags={"Users"},
+     *     @OA\Parameter(
+     *         name="username",
+     *         in="query",
+     *         description="User username",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="password",
+     *         in="query",
+     *         description="User password",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Response(response="201", description="User registered"),
+     *     @OA\Response(response="400", description="Require username and password"),
+     *     @OA\Response(response="401", description="User already exists"),
+     *     @OA\Response(response="500", description="Internal server error"),
+     * )
+     */
     public function register()
     {
         $username = $this->params['username'];
@@ -43,7 +99,7 @@ class UsersController extends Controller
 
         if (!isset($username) || empty($username) || !isset($password) || empty($password) || strlen($password) < 6) {
             $this->response([
-                'message' => 'Invalid username or password',
+                'message' => 'Require username and password',
             ], 400);
         }
 

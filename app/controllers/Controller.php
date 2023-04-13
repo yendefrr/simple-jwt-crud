@@ -31,13 +31,28 @@ class Controller
         }
     }
 
-    public function response(array $data, $code = 200)
+    public function response(array|string $data, $code = 200)
     {
         header('Content-Type: application/json');
         http_response_code($code);
 
-        echo json_encode($data);
+        echo is_array($data) ? json_encode($data) : $data;
 
         exit;
+    }
+
+    public function render(string $template, array $data = [])
+    {
+        $templatePath = __DIR__ . '/../public/templates/' . $template . '.php';
+
+        if (file_exists($templatePath)) {
+            extract($data);
+
+            require_once $templatePath;
+        } else {
+            $this->response([
+                'error' => 'Template not found',
+            ], 404);
+        }
     }
 }

@@ -7,6 +7,13 @@ use App\models\User;
 
 class NewsController extends Controller
 {
+    /**
+     * @OA\Get(
+     *     path="/crud/news/all",
+     *     tags={"News"},
+     *     @OA\Response(response="200", description="Get all news"),
+     * )
+     */
     public function all()
     {
         $news = News::all();
@@ -14,8 +21,43 @@ class NewsController extends Controller
         $this->response($news);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/crud/news/add",
+     *     tags={"News"},
+     *     @OA\Parameter(
+     *         name="title",
+     *         in="query",
+     *         description="News title",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="content",
+     *         in="query",
+     *         description="News content",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Response(response="201", description="News added"),
+     *     @OA\Response(response="401", description="Invalid token"),
+     *     @OA\Response(response="500", description="Internal server error"),
+     * )
+     */
     public function add()
     {
+        $title = $this->params['title'];
+        $content = $this->params['content'];
+        if (!isset($title) || empty($title) || !isset($content) || empty($content)) {
+            $this->response([
+                'message' => 'Invalid username or password',
+            ], 400);
+        }
+
         if (!User::verifyToken($this->token)) {
             $this->response([
                 'message' => 'Invalid token',
@@ -24,8 +66,8 @@ class NewsController extends Controller
         
         $news = new News();
         
-        $news->title = $this->params['title'];
-        $news->content = $this->params['content'];
+        $news->title = $title;
+        $news->content = $content;
         
         if ($news->save()) {
             $this->response([
@@ -38,6 +80,43 @@ class NewsController extends Controller
         }
     }
 
+    /**
+     * @OA\Patch(
+     *     path="/crud/news/edit",
+     *     tags={"News"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="query",
+     *         description="News ID",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="title",
+     *         in="query",
+     *         description="News title",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Parameter(
+     *         name="content",
+     *         in="query",
+     *         description="News content",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string"
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="Updated news"),
+     *     @OA\Response(response="401", description="Invalid token"), 
+     *     @OA\Response(response="404", description="News not found"),
+     *     @OA\Response(response="500", description="Internal server error"),
+     * )
+     */
     public function edit()
     {
         if (!User::verifyToken($this->token)) {
@@ -68,6 +147,23 @@ class NewsController extends Controller
         }
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/crud/news/{id}",
+     *     tags={"News"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="News ID",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Response(response="200", description="Deleted news"),
+     *     @OA\Response(response="404", description="News not found"),
+     * )
+     */
     public function remove()
     {
         if (!User::verifyToken($this->token)) {

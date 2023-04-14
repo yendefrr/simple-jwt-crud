@@ -55,8 +55,13 @@ class UsersController extends Controller
 
         if (password_verify($this->params['password'], $user->password_hash)) {
             $this->response([
-                'token' => $user->generateToken(),
-            ], 200);
+                'message' => 'User logged in',
+            ], 
+            200,
+            [
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . $user->generateToken(),
+            ]);
         } else {
             $this->response([
                 'message' => 'Invalid password',

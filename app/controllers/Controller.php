@@ -31,9 +31,11 @@ class Controller
         }
     }
 
-    public function response(array|string $data, $code = 200)
+    public function response(array|string $data, $code = 200, array $headers = ['Content-Type' => 'application/json']): never
     {
-        header('Content-Type: application/json');
+        foreach ($headers as $header => $value) {
+            header("$header: $value");
+        }
         http_response_code($code);
 
         echo is_array($data) ? json_encode($data) : $data;
